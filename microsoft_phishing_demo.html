@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sign in to your Microsoft account</title>
+<link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f2f2f2;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── DEMO BANNER ── */
+  .demo-banner {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #d83b01;
+    color: #fff;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 12px;
+    letter-spacing: 0.4px;
+    z-index: 9999;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: #fff;
+    width: 440px;
+    padding: 44px 44px 36px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.12);
+    margin-top: 30px;
+  }
+
+  .ms-logo {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 22px;
+    width: 108px;
+  }
+  .ms-logo span {
+    display: block;
+    width: 20px; height: 20px;
+  }
+  .ms-logo .r { background:#f25022; }
+  .ms-logo .g { background:#7fba00; }
+  .ms-logo .b { background:#00a4ef; }
+  .ms-logo .y { background:#ffb900; }
+  .ms-logo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    width: 43px;
+    height: 43px;
+    margin-bottom: 22px;
+  }
+
+  h1 {
+    font-size: 23px;
+    font-weight: 600;
+    color: #1b1b1b;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: #1b1b1b;
+    margin-bottom: 22px;
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    color: #1b1b1b;
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    border: 1px solid #666;
+    border-radius: 0;
+    padding: 6px 8px;
+    font-size: 15px;
+    margin-bottom: 20px;
+    outline: none;
+    transition: border-color .15s;
+  }
+  input:focus { border-color: #0067b8; box-shadow: 0 0 0 1px #0067b8; }
+
+  .options-row {
+    font-size: 13px;
+    color: #0067b8;
+    margin-bottom: 28px;
+    cursor: pointer;
+  }
+  .options-row:hover { text-decoration: underline; }
+
+  .btn-next {
+    background: #0067b8;
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    float: right;
+    transition: background .15s;
+  }
+  .btn-next:hover { background: #005a9e; }
+
+  .divider { clear: both; margin: 28px 0 18px; border-top: 1px solid #e0e0e0; }
+
+  .footer-links {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: #0067b8;
+    flex-wrap: wrap;
+  }
+  .footer-links a { color: #0067b8; text-decoration: none; cursor: pointer; }
+  .footer-links a:hover { text-decoration: underline; }
+
+  /* ── ATTACKER PANEL ── */
+  .attacker-panel {
+    width: 440px;
+    margin-top: 18px;
+    background: #1e1e1e;
+    border-left: 4px solid #d83b01;
+    padding: 18px 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #d4d4d4;
+    box-shadow: 0 2px 6px rgba(0,0,0,.25);
+  }
+
+  .attacker-panel .panel-title {
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #d83b01;
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .log-entry {
+    margin-bottom: 8px;
+    line-height: 1.5;
+    opacity: 0;
+    transform: translateY(6px);
+    animation: fadeUp .3s forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .log-label { color: #9cdcfe; }
+  .log-value { color: #ce9178; }
+  .log-time  { color: #6a9955; font-size: 11px; }
+  .log-ip    { color: #4ec9b0; }
+
+  .empty-state {
+    color: #555;
+    font-style: italic;
+    font-size: 12px;
+  }
+
+  /* password field hidden until email submitted */
+  #password-section { display: none; }
+</style>
+</head>
+<body>
+
+<div class="demo-banner">⚠ SECURITY DEMO — This is a simulated phishing page for educational purposes only</div>
+
+<!-- Microsoft Login Card -->
+<div class="card">
+  <div class="ms-logo-grid">
+    <span style="background:#f25022;display:block;"></span>
+    <span style="background:#7fba00;display:block;"></span>
+    <span style="background:#00a4ef;display:block;"></span>
+    <span style="background:#ffb900;display:block;"></span>
+  </div>
+
+  <h1>Sign in</h1>
+
+  <!-- STEP 1: Email -->
+  <div id="email-section">
+    <p class="subtitle">to continue to Outlook</p>
+    <label for="email">Email, phone, or Skype</label>
+    <input type="email" id="email" placeholder="" autocomplete="off" />
+    <div class="options-row">No account? Create one!</div>
+    <button class="btn-next" onclick="submitEmail()">Next</button>
+  </div>
+
+  <!-- STEP 2: Password -->
+  <div id="password-section">
+    <p class="subtitle" id="email-display" style="color:#0067b8; font-size:14px; margin-bottom:18px;"></p>
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="" autocomplete="off" />
+    <div class="options-row">Forgot password?</div>
+    <button class="btn-next" onclick="submitPassword()">Sign in</button>
+  </div>
+
+  <div class="divider"></div>
+  <div class="footer-links">
+    <a>Terms of use</a>
+    <a>Privacy & cookies</a>
+    <a>...</a>
+  </div>
+</div>
+
+<!-- Attacker Panel -->
+<div class="attacker-panel">
+  <div class="panel-title">▶ Attacker's Live Capture Feed</div>
+  <div id="log-container">
+    <div class="empty-state">Waiting for victim to interact...</div>
+  </div>
+</div>
+
+<script>
+  const logContainer = document.getElementById('log-container');
+  let logCount = 0;
+
+  function getTime() {
+    const now = new Date();
+    return now.toTimeString().split(' ')[0];
+  }
+
+  function getFakeIP() {
+    return `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
+  }
+
+  function addLog(html) {
+    if (logCount === 0) logContainer.innerHTML = '';
+    const entry = document.createElement('div');
+    entry.className = 'log-entry';
+    entry.innerHTML = html;
+    logContainer.appendChild(entry);
+    logCount++;
+  }
+
+  function submitEmail() {
+    const email = document.getElementById('email').value.trim();
+    if (!email) { document.getElementById('email').focus(); return; }
+
+    // Log email capture
+    addLog(`
+      <span class="log-time">[${getTime()}]</span> NEW CONNECTION<br>
+      <span class="log-label">  IP Address : </span><span class="log-ip">${getFakeIP()}</span><br>
+      <span class="log-label">  Email      : </span><span class="log-value">${email}</span><br>
+      <span class="log-label">  Status     : </span><span style="color:#d7ba7d;">Awaiting password...</span>
+    `);
+
+    // Show password step
+    document.getElementById('email-section').style.display = 'none';
+    document.getElementById('password-section').style.display = 'block';
+    document.getElementById('email-display').textContent = email;
+    document.getElementById('password').focus();
+  }
+
+  function submitPassword() {
+    const password = document.getElementById('password').value;
+    const email = document.getElementById('email-display').textContent;
+    if (!password) { document.getElementById('password').focus(); return; }
+
+    // Log password capture
+    addLog(`
+      <span class="log-time">[${getTime()}]</span> ✓ CREDENTIALS CAPTURED<br>
+      <span class="log-label">  Email      : </span><span class="log-value">${email}</span><br>
+      <span class="log-label">  Password   : </span><span class="log-value">${password}</span><br>
+      <span class="log-label">  User-Agent : </span><span style="color:#9cdcfe;">Chrome/Windows</span><br>
+      <span class="log-label">  Status     : </span><span style="color:#4ec9b0;">COMPLETE ✓</span>
+    `);
+
+    // Redirect to real Microsoft (makes it look seamless)
+    setTimeout(() => {
+      document.querySelector('.card').innerHTML = `
+        <div style="text-align:center; padding: 30px 0;">
+          <div style="font-size:40px; margin-bottom:16px;">⚠️</div>
+          <h2 style="color:#d83b01; margin-bottom:10px;">Demo Complete</h2>
+          <p style="color:#555; font-size:14px;">In a real attack, you would now be redirected to the legitimate Microsoft site — unaware your credentials were just stolen.</p>
+        </div>
+      `;
+    }, 800);
+  }
+
+  // Allow Enter key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      if (document.getElementById('email-section').style.display !== 'none') submitEmail();
+      else submitPassword();
+    }
+  });
+</script>
+</body>
+</html>
